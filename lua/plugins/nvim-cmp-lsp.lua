@@ -31,7 +31,9 @@ return {
 		require("lspconfig").clangd.setup({
 			capabilities = capabilities,
 		})
+
+		vim.cmd("e")
 	end,
 	lazy = true,
-	event = { "BufEnter *.cpp", "BufEnter *.h" },
+	event = { "BufRead *.cpp", "BufRead *.h" },
 }

@@ -10,5 +10,5 @@ return {
 		})
 	end,
 	lazy = true,
-	event = { "BufEnter *.lua", "BufEnter *.rs", "BufEnter *.cpp", "BufEnter *.h" }
+	event = { "BufRead *.lua", "BufRead *.rs", "BufRead *.cpp", "BufRead *.h" }
 }

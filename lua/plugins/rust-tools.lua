@@ -15,5 +15,5 @@ return {
 			end,
 		},
 	},
-	event = "BufEnter *.rs",
+	event = "BufRead *.rs",
 }
