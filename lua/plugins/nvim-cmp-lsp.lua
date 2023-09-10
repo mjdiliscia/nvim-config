@@ -25,15 +25,23 @@ return {
 				["<CR>"] = cmp.mapping.confirm({ select = true }),
 			}),
 		})
-		
+
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
-		
+
 		require("lspconfig").clangd.setup({
+			capabilities = capabilities,
+		})
+
+		require("lspconfig").rust_analyzer.setup({
+			capabilities = capabilities,
+		})
+
+		require("lspconfig").lua_ls.setup({
 			capabilities = capabilities,
 		})
 
 		vim.cmd("e")
 	end,
 	lazy = true,
-	event = { "BufRead *.cpp", "BufRead *.h" },
+	event = { "BufRead *.cpp", "BufRead *.h", "BufRead *.rs", "BufRead *.lua" },
 }

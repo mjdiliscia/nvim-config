@@ -1,8 +1,6 @@
 return {
 	"mfussenegger/nvim-lint",
 	config = function()
-		require("lint").setup({})
-
 		require('lint').linters_by_ft = {
 			markdown = {"vale"},
 --			lua = {"luacheck"},
@@ -14,5 +12,6 @@ return {
 			end,
 		})
 	end,
+	event = { "BufRead *.md", "BufRead *.cpp", "BufRead *.h" },
 	lazy = true,
 }
