@@ -1,8 +1,19 @@
 local nvim_tree = require("nvim-tree.api")
-vim.keymap.set("n", "<leader>e", nvim_tree.tree.toggle)
-vim.keymap.set("n", "<leader>fs", ":Telescope grep_string<CR>", { silent = true })
-vim.keymap.set("n", "<leader>ff", ":Telescope find_files<CR>", { silent = true })
-vim.keymap.set("n", "<leader>fg", ":Telescope find_git<CR>", { silent = true })
-vim.keymap.set("n", "<leader>cd", ":Telescope lsp_definitions<CR>", { silent = true })
-vim.keymap.set("n", "<leader>ci", ":Telescope lsp_implementations<CR>", {silent = true })
-vim.keymap.set("n", "<leader>cr", ":Telescope lsp_references<CR>", {silent = true })
+
+local wk = require("which-key")
+wk.register({
+	r = { function() vim.wo.relativenumber = not vim.wo.relativenumber end, "Toggle relative numbering" },
+	e = { nvim_tree.tree.toggle, "Toggle file tree" },
+	f = {
+		name = "Find operations",
+		s = { ":Telescope grep_string<CR>", "Find in files" },
+		f = { ":Telescope find_files<CR>", "Find files" },
+		g = { ":Telescope find_git<CR>", "Find in git" },
+	},
+	c = {
+		name = "Code operations",
+		d = { ":Telescope lsp_definitions<CR>", "Go to definition" },
+		i = { ":Telescope lsp_implementations<CR>", "Go to implementation/s" },
+		r = { ":Telescope lsp_references<CR>", "Go to reference/s" },
+	}
+}, { prefix = "<leader>" })

@@ -2,13 +2,13 @@ return {
 	"mfussenegger/nvim-dap",
 	config = function()
 		local dap = require("dap")
-		local port = 12345
+		local lldbport = 12345
 		dap.adapters.codelldb = {
 			type = "server",
-			port = "${port}",
+			port = "${lldbport}",
 			executable = {
 				command = "codelldb",
-				args = { "--port", "${port}" },
+				args = { "--port", "${lldbport}" },
 			}
 		}
 		dap.configurations.cpp = {
@@ -24,6 +24,21 @@ return {
 			}
 		}
 		dap.configurations.rust = dap.configurations.cpp
+
+		dap.adapters.godot = {
+			type = "server",
+			port = "6006",
+			host = "127.0.0.1",
+		}
+		dap.configurations.gdscript = {
+			{
+				name = "Launch scene",
+				type = "godot",
+				require = "launch",
+				project = "${workspaceFolder}",
+				launch_scene = true,
+			}
+		}
 	end,
 	lazy = true,
 }

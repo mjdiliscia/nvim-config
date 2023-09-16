@@ -8,6 +8,7 @@ end
 
 bootstrap_lazyvim()
 vim.g.mapleader = " "
+vim.wo.number = true
 
 require("lazy").setup("plugins")
 require("mappings")

@@ -5,6 +5,7 @@ return {
 			markdown = {"vale"},
 --			lua = {"luacheck"},
 			cpp = {"clangtidy"},
+			gdscript = {"gdlint"},
 		}
 		vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
 			callback = function()
@@ -12,6 +13,6 @@ return {
 			end,
 		})
 	end,
-	event = { "BufRead *.md", "BufRead *.cpp", "BufRead *.h" },
+	event = { "BufRead *.md", "BufRead *.cpp", "BufRead *.h", "BufRead *.gd", "BufRead *.gdscript", "BufRead *.gdscript3" },
 	lazy = true,
 }
