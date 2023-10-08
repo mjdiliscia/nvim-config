@@ -4,7 +4,11 @@ return {
 		"nvim-tree/nvim-web-devicons",
 	},
 	config = function ()
-		require("bufferline").setup({})
+		require("bufferline").setup({
+			options = {
+				numbers = "ordinal",
+			},
+		})
 
 		local wk = require("which-key")
 		wk.register({
@@ -21,6 +25,7 @@ return {
 				["7"] = { ":BufferLineGoToBuffer 7<CR>", "Go to file 7" },
 				["8"] = { ":BufferLineGoToBuffer 8<CR>", "Go to file 8" },
 				["9"] = { ":BufferLineGoToBuffer 9<CR>", "Go to file 9" },
+				c = { ":bd<CR>", "Close current file" },
 			},
 		}, { prefix = "<leader>" } )
 	end,
