@@ -11,6 +11,7 @@ return {
 	},
 	config = function()
 		local cmp = require("cmp")
+		local luasnip = require("luasnip")
 		cmp.setup({
 			snippet = {
 				expand = function(args)
@@ -28,17 +29,36 @@ return {
 				["<C-Space>"] = cmp.mapping.complete(),
 				["<C-e>"] = cmp.mapping.abort(),
 				["<CR>"] = cmp.mapping.confirm({ select = true }),
+				["<C-Down"] = cmp.mapping.scroll_docs(4),
+				["<C-Up>"] = cmp.mapping.scroll_docs(-4),
+				["<Tab>"] = cmp.mapping(function(fallback)
+					if cmp.visible() then
+						cmp.select_next_item()
+					elseif luasnip.locally_jumpable(1) then
+						luasnip.jump(1)
+					else
+						fallback()
+					end
+				end, { "i", "s" }),
 			}),
 		})
 
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 		local lspconfig = require("lspconfig")
 
-		lspconfig.clangd.setup({
+		local conditional_lspsetup = function(server, opts)
+			local server_cfg = require("lspconfig.server_configurations." .. server)
+			local cmd = server_cfg.default_config.cmd[1]
+			if (vim.fn.executable(cmd) ~= 0) then
+				lspconfig[server].setup(opts)
+			end
+		end
+
+		conditional_lspsetup("clangd", {
 			capabilities = capabilities,
 		})
 
-		lspconfig.rust_analyzer.setup({
+		conditional_lspsetup("rust_analyzer", {
 			capabilities = capabilities,
 		})
 
@@ -48,10 +68,13 @@ return {
 
 		lspconfig.omnisharp.setup({
 			capabilities = capabilities,
-			cmd = { "/home/lorddrako/.local/share/nvim/mason/bin/omnisharp" },
 		})
 
-		lspconfig.lua_ls.setup({
+		conditional_lspsetup("vala_ls", {
+			capabilities = capabilities,
+		})
+
+		conditional_lspsetup("lua_ls", {
 			capabilities = capabilities,
 			on_init = function(client)
 				client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
@@ -67,12 +90,19 @@ return {
 		})
 
 		vim.cmd("e")
-		vim.keymap.set("i", "<c-down>", function()
-			require("cmp").scroll_docs(4)
-		end)
-		vim.keymap.set("i", "<c-up>", function()
-			require("cmp").scroll_docs(-4)
-		end)
+		local wk = require("which-key")
+		wk.register({
+			K = { vim.lsp.buf.hover, "Show symbol information" },
+		})
+		wk.register({
+			c = {
+				R = { vim.lsp.buf.rename, "Rename symbol" },
+				a = { vim.lsp.buf.code_action, "Code actions" },
+				D = { vim.diagnostic.open_float, "Line diagnostics" },
+			},
+		}, { prefix = "<leader>" })
+--		vim.keymap.set("n", "K", vim.lsp.buf.hover)
+--		vim.keymap.set("n", "<leader>cR", vim.lsp.buf.rename)
 	end,
 	lazy = true,
 	event = {
@@ -82,5 +112,6 @@ return {
 		"BufRead *.gd", "BufRead *.gdscript", "BufRead *.gdscript3",
 		"BufRead *.cs",
 		"BufRead *.p8",
+		"BufRead *.vala",
 	},
 }

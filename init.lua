@@ -9,10 +9,19 @@ end
 bootstrap_lazyvim()
 vim.g.mapleader = " "
 vim.wo.number = true
+vim.wo.relativenumber = true
 
 require("lazy").setup("plugins")
 require("mappings")
 
+vim.api.nvim_create_autocmd({"BufNew", "BufEnter"}, {
+	pattern = { "*.cpp" },
+	callback = function (args)
+		vim.o.tabstop = 4
+		vim.o.shiftwidth = 4
+		vim.o.expandtab = true
+	end
+})
 vim.api.nvim_create_autocmd({"BufNew", "BufEnter"}, {
 	pattern = { "*.p8" },
 	callback = function(args)

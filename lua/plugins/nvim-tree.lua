@@ -4,6 +4,7 @@ return {
 		"nvim-tree/nvim-web-devicons",
 		"folke/which-key.nvim",
 	},
+	enabled = false,
 	opts = {
 		filters = {
 			dotfiles = true,
